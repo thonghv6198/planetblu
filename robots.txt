@@ -1,0 +1,3 @@
+# Bản dựng lại để xem thử — không cho công cụ tìm kiếm thu thập.
+User-agent: *
+Disallow: /

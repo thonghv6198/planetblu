@@ -1,0 +1,9 @@
+# ảnh chụp đối chiếu và tệp đo, chỉ dùng lúc dựng
+shots/
+measured*.json
+box*.json
+hover*.json
+menu.json
+slides*.json
+tools/__pycache__/
+.DS_Store

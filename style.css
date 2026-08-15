@@ -1,0 +1,291 @@
+/* Cả trang dùng một bộ chữ duy nhất: Inter tải sẵn ở fonts/inter.css
+   (bản variable 100–900 lấy từ Google Fonts). */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { background: #fff; }
+
+body {
+  background: #fff;
+  color: #000;
+  /* Chỉ khai Inter, đúng như bản gốc. Ký tự ô vuông █ không có trong Inter nên
+     trình duyệt mượn font mặc định — thêm -apple-system vào đây là ô vuông bị
+     mượn nhầm font khác và nhỏ hơn bản gốc rõ rệt. */
+  /* Ký tự ô vuông █ không có trong Inter nên trình duyệt mượn font khác. Bản gốc
+     mượn phải font có chiều cao dòng 15 (ô vuông cao 21,09px sau khi phóng), còn
+     mặc định của máy chỉ cao 14 — lệch cả chiều cao lẫn vị trí ô vuông. Ghim
+     Lucida Grande để chọn đúng loại bản gốc dùng. */
+  font-family: Inter;
+}
+
+/* Sân khấu cố định: mọi phần tử được đặt tuyệt đối theo toạ độ đo từ bản gốc,
+   cả khối được scale theo bề rộng cửa sổ giống cơ chế zoom của Readymag. */
+#stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1425px;
+  height: 900px;
+  transform-origin: 0 0;
+  overflow: hidden;
+  background: #fff;
+  z-index: 1;
+}
+
+/* Bề rộng do app.js đặt: bằng bề rộng khung sau khi chặn ngưỡng thu nhỏ, nhờ đó
+   cửa sổ hẹp hơn ngưỡng thì có thanh cuộn ngang đúng như bản gốc. */
+#spacer { width: 1px; }
+
+.el {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Khối chữ không ép lên lớp đồ hoạ riêng — để trình duyệt vẽ chữ trực tiếp,
+   nét sắc hơn khi cả khối đang được phóng. */
+.el.txt {
+  will-change: auto;
+  backface-visibility: visible;
+}
+
+.el.txt {
+  /* Bản gốc dàn chữ qua nhiều lớp zoom lồng nhau, nên trình duyệt vẽ nét dày hơn
+     khoảng 20% so với khi ta phóng một lần. Bù lại bằng một nét viền rất mảnh —
+     đo bằng lượng mực trên ảnh chụp: 0.33px cho khớp bản gốc (15,4% so với 15,4%). */
+  -webkit-text-stroke: 0.33px currentColor;
+  white-space: pre-wrap;
+  /* Bản gốc để optical sizing tự động. Cỡ chữ khai báo rất nhỏ (8px) rồi mới
+     phóng lên, nên Inter chọn optical size nhỏ — nét dày hơn hẳn. Tắt đi là chữ
+     mảnh đi trông thấy, nên phải giữ auto đúng như bản gốc. */
+  font-optical-sizing: auto;
+}
+
+img.el { display: block; }
+
+.el.bg {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+a.el { text-decoration: none; color: inherit; display: block; }
+
+/* Video: hiện poster kèm nút phát tròn, giống bản gốc */
+.el.video { cursor: pointer; overflow: hidden; }
+.el.video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.el.video .play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+.el.video .play::after {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 24px;
+  border-left: 22px solid #fff;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+}
+.el.video.playing .play { opacity: 0; }
+
+/* Slideshow ảnh lớn ở đầu trang: 4 tấm xếp ngang, trượt như bản gốc */
+.slideshow { overflow: hidden; }
+.slideshow .track {
+  display: flex;
+  height: 100%;
+  transition: transform .9s cubic-bezier(.4, 0, .2, 1);
+}
+.slideshow .slide {
+  flex: 0 0 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+/* Menu xổ dưới thanh điều hướng — nằm trên mọi lớp nội dung */
+.drop {
+  position: absolute;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+  /* Ký tự ô vuông █ không có trong Inter nên trình duyệt mượn font khác. Bản gốc
+     mượn phải font có chiều cao dòng 15 (ô vuông cao 21,09px sau khi phóng), còn
+     mặc định của máy chỉ cao 14 — lệch cả chiều cao lẫn vị trí ô vuông. Ghim
+     Lucida Grande để chọn đúng loại bản gốc dùng. */
+  font-family: Inter;
+  color: #000;
+  text-decoration: none;
+  background: #fff;
+  white-space: nowrap;
+  text-align: right;   /* mép phải thẳng hàng với mục cha, như bản gốc */
+}
+.drop.open { opacity: 1; pointer-events: auto; }
+/* Rê vào mục con thì chữ và ô vuông cùng nhạt đi, y như rê vào mục cha. */
+.drop { transition: color .18s ease; }
+/* Áp cho mọi mục con, kể cả mục không bấm được (VN) — chúng là thẻ div nên
+   bộ chọn theo thẻ <a> không với tới. */
+.drop:hover { color: #b3b3b3; text-decoration: none; }
+
+.navlink { cursor: pointer; }
+
+/* Ảnh xem trước của một dòng sự kiện: chỉ hiện khi rê chuột vào dòng đó */
+.el.preview { opacity: 0; transition: opacity .25s ease; }
+.el.preview.show { opacity: 1; }
+
+/* Rê vào mục chữ bấm được (More, tên tác phẩm ở phần Project…) thì chữ mờ còn 30%,
+   đúng như bản gốc. Dùng :hover của CSS cho chắc, khỏi phụ thuộc sự kiện JS.
+   Trừ nút bấm nền đặc (Order, Book): chữ trắng mà tô đen 30% thì lẫn vào nền,
+   mất hút. Bản mẫu cũng không đổi gì khi rê vào chúng. */
+.el.navlink:not(.nav):not(.nut):hover,
+.el.navlink:not(.nav):not(.nut):hover .zoomed { color: rgba(0, 0, 0, .3) !important; }
+.el.navlink { transition: color .2s ease; }
+
+/* Rê vào nút More thì chữ mờ đi, rê vào ảnh trong lưới thì ảnh mờ đi */
+.el.faded-text, .el.faded-text .zoomed { color: rgba(0, 0, 0, .3) !important; }
+.el.faded-text, .el.faded-img { transition: opacity .2s ease, color .2s ease; }
+.el.faded-img { opacity: .3 !important; }
+
+/* Cả ô của một dòng sự kiện đều nhận chuột, không riêng phần chữ: rê vào bất kỳ
+   đâu trong ô — kể cả khoảng trống và cột ngày — là ảnh xem trước hiện ra.
+   z-index cao để các khối chữ nằm đè không cắt vụn vùng nhận chuột. */
+.el.row { z-index: 500 !important; }
+.el.row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -12px;
+  width: 700px;
+  height: 250px;
+}
+/* Rê vào bất kỳ mục nào trên thanh điều hướng thì mục đó nhạt đi — kể cả mục
+   không có menu con. Trước đây chỉ mục đang mở menu con mới đổi màu, nên thanh
+   trên cùng phản ứng không đều nhau.
+   màu đặt sẵn trên từng phần tử nên cần ghi đè bằng !important */
+.el.nav { transition: color .18s ease; }
+.el.nav:hover, .el.nav:hover .zoomed { color: #b3b3b3 !important; }
+.el.dimmed, .el.dimmed .zoomed { color: #b3b3b3 !important; transition: color .18s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slideshow .track { transition: none; }
+}
+
+/* Đường kẻ và mũi tên của biểu mẫu, giữ nguyên mã SVG của bản gốc */
+.el.svg > svg { width: 100%; height: 100%; display: block; }
+
+/* Liên kết nằm trong khối chữ: bản gốc tô cùng màu chữ, nếu để mặc định thì
+   trình duyệt tô xanh và gạch chân. */
+.el a, .el a:visited { color: inherit; text-decoration: none; }
+
+/* Bản gốc không cho bôi đen nội dung; nếu không, vệt chọn màu xanh sẽ lộ ra
+   ở những ô vuông đặc khi người xem lỡ kéo chuột. */
+#stage { user-select: none; -webkit-user-select: none; }
+
+/* Mục điều hướng giữ chữ và ô vuông trên cùng một dòng: cả khối ngoài lẫn lớp
+   phóng bên trong đều phải tự co theo chữ, nếu không chữ vẫn bị bó và rớt dòng. */
+.el.one-line,
+.el.one-line .zoomed {
+  white-space: nowrap;
+  width: auto !important;
+  height: auto !important;
+}
+/* Giữ block: để inline-block thì lớp phóng nằm trên đường chữ của khối cha và bị
+   đẩy tụt xuống, lệch hàng với các mục còn lại. Khối cha đặt tuyệt đối nên dù là
+   block nó vẫn tự co theo bề rộng chữ. */
+.el.one-line .zoomed { display: block; }
+
+/* Nút bấm của bản gốc: ô nền đặc, chữ căn giữa cả hai chiều.
+   Phải căn ở lớp phóng bên trong: lớp này được phóng bằng transform nên khung
+   dàn trang của nó nhỏ hơn kích thước nhìn thấy — căn ở khối ngoài thì chữ lệch
+   khỏi tâm ô. */
+.el.nut .zoomed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Rê chuột vào mục trong nhóm menu dọc (Video, Exhibition… / Event ticket…):
+   cả chữ lẫn ô vuông cùng nhạt đi, đo trên bản gốc ra đúng #b3b3b3. */
+.el.mo { transition: color .18s ease; }
+.el.mo:hover, .el.mo:hover .zoomed { color: #b3b3b3 !important; }
+
+/* Thanh điều hướng tách riêng: dải nền trắng cao cố định, luôn nằm trên cùng và
+   không trôi khi cuộn (cả sân khấu vốn đã cố định). Các mục bên trong được canh
+   giữa theo chiều dọc trong dải này. */
+#topbar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* 50px ngay từ khung hình đầu tiên, trước cả khi app.js quy đổi theo hệ số
+     phóng — nếu bỏ, thanh cao 0 trong chớp mắt rồi mới bung ra. */
+  height: 50px;
+  background: #fff;
+  z-index: 9000;
+}
+#topbar .el { z-index: 1; }
+
+/* Ô nhập đặt trùng lên đường kẻ của biểu mẫu: không viền, không nền, chỉ có con
+   trỏ nhập và chữ — nhìn y như bản gốc nhưng bấm vào gõ được. */
+.el.svg .onhap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  padding: 0 1px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11.25px;
+  color: #000;
+  cursor: text;
+}
+.el.svg:focus-within > svg path { stroke-width: 2; }
+
+/* Ô chọn: giấu mũi tên mặc định của trình duyệt vì bản mẫu đã vẽ sẵn ▼ riêng. */
+.el.svg .ochon {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Logo đứng đầu thanh điều hướng, bấm được để về trang chủ */
+/* Bản mẫu ở khổ điện thoại không có dải nền cho thanh điều hướng — nội dung trôi
+   thẳng qua dưới các mục. Để nền trắng thì nó che mất mấy dòng chữ đầu.
+   Bám theo bố cục chứ không theo bề rộng cửa sổ: thu hẹp cửa sổ máy tính vẫn là
+   bố cục máy tính nên vẫn giữ dải nền trắng. */
+.bocuc-dt #topbar { background: transparent; }
+
+#topbar #logo {
+  position: absolute;
+  width: auto;
+  z-index: 2;
+}
+
+/* Ô vuông ■ được gắn liên kết: chính ký tự đó là vùng bấm, nên hai mục có hộp
+   chồng nhau vẫn không giành mất chuột của nhau. */
+.el .onut { cursor: pointer; transition: color .2s ease; }
+/* Phần tử chỉ bấm được ở ô vuông: phần chữ giữ con trỏ thường. */
+.el.chi-onut { cursor: default; }
+.el.chi-onut .onut { cursor: pointer; }
+.el .onut:hover { color: rgba(0, 0, 0, .3); }
