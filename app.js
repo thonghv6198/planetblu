@@ -269,6 +269,9 @@
           : s.fs;
       }
       if (s.fw) tgt.style.fontWeight = s.fw;
+      // Độ đậm thật của bản gốc nằm ở trục biến thiên `wght` của Inter, không
+      // phải font-weight — thiếu dòng này thì chữ mảnh hơn bản mẫu trông thấy.
+      if (it.wght) tgt.style.fontVariationSettings = '"wght" ' + it.wght;
       if (s.lh) tgt.style.lineHeight = s.lh;
       if (s.ls && s.ls !== 'normal') tgt.style.letterSpacing = s.ls;
       if (s.color) tgt.style.color = s.color;

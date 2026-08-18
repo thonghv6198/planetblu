@@ -53,10 +53,9 @@ body {
 }
 
 .el.txt {
-  /* Bản gốc dàn chữ qua nhiều lớp zoom lồng nhau, nên trình duyệt vẽ nét dày hơn
-     khoảng 20% so với khi ta phóng một lần. Bù lại bằng một nét viền rất mảnh —
-     đo bằng lượng mực trên ảnh chụp: 0.33px cho khớp bản gốc (15,4% so với 15,4%). */
-  -webkit-text-stroke: 0.33px currentColor;
+  /* Không bù nét viền nữa: trước đây chữ mảnh hơn bản mẫu vì bộ đo chỉ đọc
+     font-weight (luôn ra 400) mà bỏ sót trục `wght` của Inter. Nay độ đậm thật
+     được nạp từ dữ liệu, thêm viền là đậm gấp đôi. */
   white-space: pre-wrap;
   /* Bản gốc để optical sizing tự động. Cỡ chữ khai báo rất nhỏ (8px) rồi mới
      phóng lên, nên Inter chọn optical size nhỏ — nét dày hơn hẳn. Tắt đi là chữ

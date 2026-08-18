@@ -104,8 +104,14 @@ node tools/measure.js 6473183/ hoavarac          # bản máy tính
 node tools/measure.js 6473183/ hoavarac mobile   # bản điện thoại
 node tools/hover-scan.js 6473183/ hoavarac       # khối nào có hiệu ứng rê chuột
 node tools/box-scan.js  6473183/ hoavarac        # khoảng chừa của ô vuông ■
+node tools/wght-scan.js 6473183/ hoavarac        # độ đậm thật (trục wght của Inter)
 python3 build.py hoavarac                        # dựng data-hoavarac.js
 ```
+
+Inter là font biến thiên: bản mẫu chỉnh độ đậm bằng trục `wght` chứ không dùng
+`font-weight` (đọc `font-weight` thì khối nào cũng ra 400). `wght-scan.js` khoá
+kết quả theo `cỡ chữ|chữ` chứ không theo mã `kNN` — mỗi lần mở trang Readymag lại
+dựng số phần tử khác nhau nên mã đánh ra lệch giữa hai lần chạy.
 
 `measure.js` đánh mã `kNN` cho từng phần tử, ghi quỹ đạo ở các mốc cuộn cách nhau
 50px cộng thêm đúng mốc đáy trang. `build.py` đổi số liệu đó thành `data-*.js`.

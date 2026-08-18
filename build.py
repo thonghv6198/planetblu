@@ -45,6 +45,19 @@ hover = json.load(open(HOVER_SRC)) if os.path.exists(HOVER_SRC) else {}
 # tools/box-scan.js. Dựng lại bằng dấu cách thì lệch nửa pixel mỗi dấu.
 BOX_SRC = 'box-%s.json' % NAME.replace('mobile-', '') if NAME.replace('mobile-', '') else 'box.json'
 box = json.load(open(BOX_SRC)) if os.path.exists(BOX_SRC) else {}
+# Độ đậm thật: Inter là font biến thiên, bản gốc chỉnh bằng trục `wght` chứ không
+# dùng font-weight — đọc mỗi font-weight thì khối nào cũng ra 400. Đo bằng
+# tools/wght-scan.js, khoá theo "cỡ chữ|chữ" chứ không theo mã kNN: mỗi lần mở
+# trang Readymag lại dựng số phần tử khác nhau nên mã đánh ra lệch giữa hai lần.
+WGHT_SRC = 'wght-%s.json' % NAME if NAME else 'wght.json'
+wght = json.load(open(WGHT_SRC)) if os.path.exists(WGHT_SRC) else {}
+
+
+def do_dam(n):
+    t = re.sub(r'\s+', ' ', (n.get('text') or '').strip())[:60]
+    if not t:
+        return None
+    return wght.get((n.get('fs') or '') + '|' + t)
 
 # ── ngưỡng đổi đường dẫn, lấy từ chính lộ trình quan sát khi cuộn ──────────
 routes, last = [], None
@@ -248,6 +261,7 @@ for k in sorted([k for k in style if k in tracks and k not in slide_drop], key=p
         # rê chuột vào thì chữ và ô vuông cùng mờ đi, đúng như bản gốc
         'mo': True if hover.get(k) else None,
         'pad': pad_cuoi(k, n),
+        'wght': do_dam(n),
         'tag': 'video' if n['tag'] == 'VIDEO' else 'img' if n['tag'] == 'IMG' else 'div',
         'src': local(n.get('src')),
         'bg': bool(n.get('isBg')),

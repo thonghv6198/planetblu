@@ -103,7 +103,9 @@ window.PB_CFG = {
        gianChu:          giá trị letter-spacing áp cho mọi khối chữ
        gianDongToiThieu: giãn dòng tối thiểu, tính theo lần cỡ chữ (chỉ khối
                          nhiều dòng; khối một dòng nới sẽ trôi khỏi chỗ đã đo) */
-  chu: { gianChu: 'normal', gianDongToiThieu: 1.45 },
+  // Tắt: anh Thông muốn phần chữ bám đúng bản mẫu. Bật lại bằng
+  //   chu: { gianChu: 'normal', gianDongToiThieu: 1.45 }
+  chu: null,
 
   /* ---------- ép chữ và ô vuông ■ về cùng một dòng ---------- */
   /* Bản mẫu để ô vuông rớt xuống dòng dưới rồi đè lên chữ; khai ở đây để nó nằm
