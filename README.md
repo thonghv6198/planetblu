@@ -76,6 +76,7 @@ trong các tệp `.html` cho khớp màu nền biểu tượng.
 | `lienKet` | gắn liên kết cho phần tử bản mẫu bỏ trống |
 | `oNhap` | kích thước ô nhập của biểu mẫu và khoảng đẩy nét kẻ xuống |
 | `menuMobile` | menu phủ toàn màn hình khi chạm nút gạch (bản điện thoại) |
+| `canhO` | nhóm khối cần cho ô vuông ■ thẳng một cột (tự đo, không ghim số) |
 | `themMuc` | mục điều hướng thêm tay cho trang bản mẫu bỏ trống |
 | `boMuc` | mục điều hướng bỏ hẳn khỏi thanh (logo đã thế chỗ) |
 | `oChon` | trường nào là ô chọn (thay vì ô gõ chữ) và các lựa chọn của nó |

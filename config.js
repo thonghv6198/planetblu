@@ -141,6 +141,18 @@ window.PB_CFG = {
   // Giãn dòng vẫn giữ đúng bản mẫu.
   chu: { gianChu: '0px' },
 
+  /* ---------- canh ô vuông ■ về cùng một cột ---------- */
+  /* Mỗi nhóm là danh sách mã khối; khối đầu làm mốc, các khối sau tự dịch cho
+     mép phải ô vuông trùng nhau. Đo tại chỗ nên không sai khi đổi độ đậm hay
+     giãn chữ — khác với việc ghim sẵn số dịch trong `chinh`. */
+  canhO: {
+    'index.html':        [['k67', 'k68']],
+    'visit.html':        [['k0', 'k1', 'k2']],
+    'visit.html@mobile': [['k0', 'k1', 'k2']],
+    'event.html':        [['k0', 'k1', 'k2']],
+    'event.html@mobile': [['k0', 'k1', 'k3']]
+  },
+
   /* ---------- ép chữ và ô vuông ■ về cùng một dòng ---------- */
   /* Bản mẫu để ô vuông rớt xuống dòng dưới rồi đè lên chữ; khai ở đây để nó nằm
      ngay sau chữ. */
@@ -185,9 +197,8 @@ window.PB_CFG = {
     'visit.html@mobile': {
       k22: { dy: -12.2 }, k23: { dy: -12.2 },
       k26: { dy: -12.2 }, k27: { dy: -12.2 },
-      k9: { dy: 11.1 }, k11: { dy: 12.3 }, k17: { dy: 11.1 },
-      // nhóm "Event ticket / Studio visit / Contact us": ô vuông thẳng một cột
-      k1: { dx: -3.31 }, k2: { dx: -2.84 }
+      k9: { dy: 11.1 }, k11: { dy: 12.3 }, k17: { dy: 11.1 }
+
     }
   },
 

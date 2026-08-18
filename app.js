@@ -80,6 +80,8 @@
   var BO_MUC = CFG.boMuc || [];
   // Mục điều hướng thêm tay cho trang mà bản mẫu bỏ trống
   var THEM_MUC = theoTrang(CFG.themMuc) || [];
+  // Nhóm khối chữ cần cho ô vuông ■ thẳng một cột
+  var CANH_O = theoTrang(CFG.canhO) || [];
 
   // Thanh điều hướng là một khối header riêng: dải nền trắng cao cố định, các mục
   // canh giữa theo chiều dọc, luôn dính trên cùng.
@@ -548,7 +550,7 @@
       if (t < 0) t = 0; else if (t > 1) t = 1;
 
       var chinh = CHINH[k];
-      var x = a[1] + (b[1] - a[1]) * t + (chinh && chinh.dx || 0);
+      var x = a[1] + (b[1] - a[1]) * t + (chinh && chinh.dx || 0) + (e.dxCanh || 0);
       // Mục bên trái dịch sang nhường chỗ cho logo. Trên điện thoại chỉ có nút mở
       // menu, và khối của nó trải gần hết bề ngang nên cũng chỉ dịch chứ không
       // căn được về mép phải.
@@ -631,6 +633,7 @@
     running = false;
     cur = target;
     place(cur);
+    if (CANH_O.length) canhOVuong();
     syncRoute(cur);
   }
 
@@ -705,7 +708,10 @@
     if (TINH) cuonTinh = window.scrollY / scale;
     maxCuon = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     cur = target = progress();
+    daCanh = [];          // đổi cỡ cửa sổ thì đo lại từ đầu
+    els && Object.keys(els).forEach(function (k) { els[k].dxCanh = 0; });
     place(cur);
+    if (CANH_O.length) canhOVuong();
     // Sau place(): logo canh theo ô vuông của mục điều hướng nên phải đợi các
     // mục ấy về đúng chỗ, không thì đo trúng vị trí cũ.
     // mục thêm tay canh dọc giống các mục đo được
@@ -737,6 +743,54 @@
         node._at = 0;
       }, 580);
     }
+  }
+
+  /* Canh ô vuông ■ của một nhóm khối chữ về cùng một cột.
+
+     Đo tại chỗ rồi bù, thay vì ghim sẵn số dịch trong cấu hình: bề rộng chữ đổi
+     theo độ đậm, giãn chữ, bộ chữ của máy… nên số ghim cứng chóng sai. */
+  var daCanh = [];   // nhóm nào đã canh xong thì thôi đo lại
+  function canhOVuong() {
+    var suaGi = false;
+    CANH_O.forEach(function (nhom, idx) {
+      if (daCanh[idx]) return;
+      // chỉ đo được khi cả nhóm đang hiện trên màn hình
+      var khung = nhom.map(function (k) {
+        var e = els[k];
+        return e && e.node.style.display !== 'none' ? oVuongCua(e.node) : null;
+      });
+      if (khung.some(function (q) { return !q; })) return;
+      var moc = khung[0].right;
+      nhom.forEach(function (k, i) {
+        if (!i) return;
+        var lech = moc - khung[i].right;
+        if (Math.abs(lech) > 0.05) {
+          els[k].dxCanh = (els[k].dxCanh || 0) + lech / scale;
+          suaGi = true;
+        }
+      });
+      daCanh[idx] = true;
+    });
+    if (suaGi) place(cur);
+  }
+
+  /* Khung của ký tự ô vuông ■ đầu tiên trong một khối chữ */
+  function oVuongCua(node) {
+    var z = node.querySelector('.zoomed') || node;
+    var n = null;
+    (function di(nd) {
+      for (var i = 0; i < nd.childNodes.length && !n; i++) {
+        var c = nd.childNodes[i];
+        if (c.nodeType === 3 && c.textContent.indexOf('\u2588') >= 0) n = c;
+        else if (c.nodeType === 1) di(c);
+      }
+    })(z);
+    if (!n) return null;
+    var i = n.textContent.indexOf('\u2588');
+    var r = document.createRange();
+    r.setStart(n, i); r.setEnd(n, i + 1);
+    var q = r.getBoundingClientRect();
+    return q.width > 0 ? q : null;
   }
 
   /* Menu của bản điện thoại: chạm nút gạch thì phủ kín màn hình, các mục xếp
@@ -1104,7 +1158,9 @@
   // Lúc này bộ chữ có thể chưa tải xong, mà logo lại canh theo ô vuông ■ của mục
   // điều hướng — đo sớm là trúng số đo của font tạm. Canh lại khi chữ đã sẵn sàng.
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () { resize(); });
+    document.fonts.ready.then(function () { resize(); canhOVuong(); });
+  } else {
+    canhOVuong();
   }
   toiDoan();
   window.addEventListener('scroll', onScroll, { passive: true });
