@@ -396,6 +396,7 @@
 
     keoDaiTruot();
     stage.appendChild(frag);
+    dungMenuMobile();
     hookMenu();
     hookHover();
   }
@@ -710,6 +711,74 @@
         node._at = 0;
       }, 580);
     }
+  }
+
+  /* Menu của bản điện thoại: chạm nút gạch thì phủ kín màn hình, các mục xếp
+     dọc canh mép phải, chạm X hoặc chạm một mục thì đóng. Bản mẫu cũng vậy. */
+  function dungMenuMobile() {
+    var mm = CFG.menuMobile;
+    if (!D.mobile || !mm || !mm.muc || !mm.muc.length) return;
+
+    // nút mở: mục điều hướng dạng ảnh duy nhất trên thanh (nút gạch)
+    var nut = null;
+    stage.querySelectorAll('#topbar .el').forEach(function (e) {
+      if (!nut && e.tagName === 'IMG') nut = e;
+    });
+    if (!nut) return;
+
+    var lop = document.createElement('div');
+    lop.className = 'menu-dt';
+    lop.setAttribute('role', 'dialog');
+    lop.setAttribute('aria-label', 'menu');
+
+    var dong = document.createElement('button');
+    dong.className = 'dong';
+    dong.setAttribute('aria-label', 'đóng menu');
+    dong.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M3 3 L21 21 M21 3 L3 21" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>';
+    lop.appendChild(dong);
+
+    var ds = document.createElement('nav');
+    ds.className = 'ds';
+    mm.muc.forEach(function (m) {
+      var el = document.createElement('a');
+      el.href = url(m.trang);
+      // Ô vuông vẽ bằng CSS chứ không dùng ký tự ■: ký tự lấy từ font dự phòng
+      // nên cao thấp tuỳ máy, không khép sát nhau được. Vẽ thì cao đúng bằng
+      // khoảng cách dòng, các ô chạm nhau thành một dải liền như bản mẫu.
+      el.innerHTML = m.text + ' <i class="ov"></i>';
+      ds.appendChild(el);
+    });
+    lop.appendChild(ds);
+    stage.appendChild(lop);
+
+    // vị trí và cỡ chữ khai theo hệ toạ độ bố cục, đổi cùng lúc với cả trang
+    function dat() {
+      ds.style.right = (mm.phai || 29) + 'px';
+      ds.style.top = (mm.dau || 302) + 'px';
+      ds.style.fontSize = (mm.co || 34) + 'px';
+      ds.style.lineHeight = (mm.buoc || 48) + 'px';
+      var cao = mm.buoc || 48;
+      ds.querySelectorAll('.ov').forEach(function (v) {
+        v.style.height = cao + 'px';
+        v.style.width = (cao * 0.82).toFixed(1) + 'px';
+      });
+      lop.style.width = D.baseW + 'px';
+      lop.style.height = (window.innerHeight / scale) + 'px';
+    }
+    dat();
+    window.addEventListener('resize', dat);
+
+    var mo = function (ev) {
+      dat();
+      lop.classList.add('hien');
+      if (ev) ev.stopPropagation();
+    };
+    var tat = function () { lop.classList.remove('hien'); };
+    nut.style.cursor = 'pointer';
+    nut.addEventListener('click', mo);
+    dong.addEventListener('click', function (ev) { tat(); ev.stopPropagation(); });
+    ds.addEventListener('click', tat);
   }
 
   /* Dựng ô chọn riêng thay cho thẻ <select>.

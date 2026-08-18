@@ -306,11 +306,52 @@ a.el { text-decoration: none; color: inherit; display: block; }
 .el.svg .ochon .bangchon li.tro { background: #333; }
 
 /* Logo đứng đầu thanh điều hướng, bấm được để về trang chủ */
-/* Bản mẫu ở khổ điện thoại không có dải nền cho thanh điều hướng — nội dung trôi
-   thẳng qua dưới các mục. Để nền trắng thì nó che mất mấy dòng chữ đầu.
-   Bám theo bố cục chứ không theo bề rộng cửa sổ: thu hẹp cửa sổ máy tính vẫn là
-   bố cục máy tính nên vẫn giữ dải nền trắng. */
-.bocuc-dt #topbar { background: transparent; }
+/* Menu của bản điện thoại: phủ kín màn hình, các mục canh mép phải. */
+.menu-dt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #fff;
+  z-index: 9800;
+  display: none;
+}
+.menu-dt.hien { display: block; }
+.menu-dt .dong {
+  position: absolute;
+  right: 22px;
+  top: 14px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #000;
+  cursor: pointer;
+}
+.menu-dt .dong svg { width: 100%; height: 100%; display: block; }
+.menu-dt .ds {
+  position: absolute;
+  text-align: right;
+  white-space: nowrap;
+}
+.menu-dt .ds a {
+  display: block;
+  color: #000;
+  text-decoration: none;
+}
+.menu-dt .ds a:hover { color: #b3b3b3; }
+/* Ô vuông vẽ bằng CSS chứ không dùng ký tự ■: ký tự lấy từ font dự phòng nên cao
+   thấp tuỳ máy, không khép sát nhau được. Vẽ thì cao đúng bằng khoảng cách dòng,
+   các ô chạm nhau thành một dải liền như bản mẫu. */
+.menu-dt .ds .ov {
+  display: inline-block;
+  vertical-align: top;
+  background: currentColor;
+  margin-left: .28em;
+}
+/* Ký tự ô vuông ■ lấy từ font dự phòng nên thấp hơn khoảng cách dòng; phóng
+   riêng nó lên để các ô chạm nhau thành dải liền. */
+
 
 #topbar #logo {
   position: absolute;

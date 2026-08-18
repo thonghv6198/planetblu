@@ -59,6 +59,23 @@ window.PB_CFG = {
     { under: ['EN'], x: 1219, y: 22, w: 84.6, h: 14, fs: 8, text: 'VN █' }
   ],
 
+  /* ---------- menu của bản điện thoại ---------- */
+  /* Chạm nút gạch thì phủ kín màn hình. Toạ độ theo hệ của bố cục điện thoại
+     (rộng 375), đo từ bản mẫu. */
+  menuMobile: {
+    phai: 29,     // mép phải của cụm chữ
+    dau: 302,     // vị trí dọc của mục đầu
+    buoc: 48,     // khoảng cách giữa các mục
+    co: 34,       // cỡ chữ
+    muc: [
+      { text: 'Event',    trang: 'event.html' },
+      { text: 'Project',  trang: 'hoavarac.html' },
+      { text: 'Archive',  trang: 'archive.html' },
+      { text: 'Visit',    trang: 'visit.html' },
+      { text: 'About us', trang: 'index.html#aboutus' }
+    ]
+  },
+
   /* ---------- ảnh xem trước khi rê vào một dòng sự kiện ---------- */
   /* row: mã dòng sự kiện; dx, dy: lệch so với dòng đó; src: ảnh trong assets/ */
   xemTruoc: {
@@ -114,9 +131,9 @@ window.PB_CFG = {
        gianChu:          giá trị letter-spacing áp cho mọi khối chữ
        gianDongToiThieu: giãn dòng tối thiểu, tính theo lần cỡ chữ (chỉ khối
                          nhiều dòng; khối một dòng nới sẽ trôi khỏi chỗ đã đo) */
-  // Tắt: anh Thông muốn phần chữ bám đúng bản mẫu. Bật lại bằng
-  //   chu: { gianChu: 'normal', gianDongToiThieu: 1.45 }
-  chu: null,
+  // Giãn chữ để 0 thay vì các giá trị âm của bản mẫu (-0,2 đến -1px).
+  // Giãn dòng vẫn giữ đúng bản mẫu.
+  chu: { gianChu: '0px' },
 
   /* ---------- ép chữ và ô vuông ■ về cùng một dòng ---------- */
   /* Bản mẫu để ô vuông rớt xuống dòng dưới rồi đè lên chữ; khai ở đây để nó nằm

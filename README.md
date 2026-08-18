@@ -30,9 +30,7 @@ Giống bản mẫu:
   thoại xoay ngang cũng quay về bố cục máy tính. Xoay máy vượt ngưỡng thì trang
   tự nạp lại vì hai bố cục dùng hai bộ dữ liệu khác nhau.
 - **Dưới 768px** thì thôi thu nhỏ: giữ nguyên cỡ chữ và bố cục, cho cuộn ngang.
-- Ở khổ điện thoại, thanh điều hướng **không có dải nền** (bản mẫu cũng vậy) —
-  nội dung trôi thẳng qua dưới nó. Logo đặt giữa để không đè lên nút mở menu bên
-  trái và cụm EN / Planet BLU bên phải; đổi bằng `header.logo.viTriMobile`.
+- Ở khổ điện thoại, chạm nút gạch mở menu phủ kín màn hình (khai ở `menuMobile`).
 
 CSS bám theo lớp `bocuc-dt` / `bocuc-mt` mà `app.js` gắn lên thẻ `<html>`, chứ
 không dùng `@media` theo bề rộng — thu hẹp cửa sổ máy tính vẫn là bố cục máy tính.
@@ -77,6 +75,7 @@ trong các tệp `.html` cho khớp màu nền biểu tượng.
 | `truot` | kéo dài đường trượt của một phần tử khi cuộn |
 | `lienKet` | gắn liên kết cho phần tử bản mẫu bỏ trống |
 | `oNhap` | kích thước ô nhập của biểu mẫu và khoảng đẩy nét kẻ xuống |
+| `menuMobile` | menu phủ toàn màn hình khi chạm nút gạch (bản điện thoại) |
 | `boMuc` | mục điều hướng bỏ hẳn khỏi thanh (logo đã thế chỗ) |
 | `oChon` | trường nào là ô chọn (thay vì ô gõ chữ) và các lựa chọn của nó |
 | `chu` | giãn chữ và giãn dòng tối thiểu; bỏ đi thì trả về đúng số đo bản mẫu |
