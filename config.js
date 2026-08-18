@@ -38,6 +38,12 @@ window.PB_CFG = {
   /* Mục điều hướng bỏ hẳn — logo đã thế chỗ. */
   boMuc: ['Planet BLU'],
 
+  /* Mục điều hướng thêm tay: bản mẫu không có EN ở trang chủ khổ điện thoại,
+     trong khi các trang con đều có. Toạ độ lấy theo mục EN của trang con. */
+  themMuc: {
+    'index.html@mobile': [{ text: 'EN █', x: 189.2, fs: 8 }]
+  },
+
   /* Hệ số phóng của các mục điều hướng trong bản gốc — dùng cho menu xổ xuống
      để cỡ chữ mục con khớp mục cha. */
   navZoom: 1.4063,
@@ -179,7 +185,9 @@ window.PB_CFG = {
     'visit.html@mobile': {
       k22: { dy: -12.2 }, k23: { dy: -12.2 },
       k26: { dy: -12.2 }, k27: { dy: -12.2 },
-      k9: { dy: 11.1 }, k11: { dy: 12.3 }, k17: { dy: 11.1 }
+      k9: { dy: 11.1 }, k11: { dy: 12.3 }, k17: { dy: 11.1 },
+      // nhóm "Event ticket / Studio visit / Contact us": ô vuông thẳng một cột
+      k1: { dx: -3.31 }, k2: { dx: -2.84 }
     }
   },
 

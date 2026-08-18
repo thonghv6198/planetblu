@@ -78,6 +78,8 @@
   var CHU = CFG.chu || null;
   // Mục điều hướng cần bỏ hẳn (đã có thứ khác thế chỗ, ví dụ logo)
   var BO_MUC = CFG.boMuc || [];
+  // Mục điều hướng thêm tay cho trang mà bản mẫu bỏ trống
+  var THEM_MUC = theoTrang(CFG.themMuc) || [];
 
   // Thanh điều hướng là một khối header riêng: dải nền trắng cao cố định, các mục
   // canh giữa theo chiều dọc, luôn dính trên cùng.
@@ -127,6 +129,7 @@
   });
 
   var els = {};
+  var themTay = [];   // mục điều hướng thêm tay, đặt lại vị trí trong resize()
   var scale = 1;
   var offsetY = 0;
   var shiftY = 0;   // dịch dọc của nội dung khi chiều cao cửa sổ khác lúc đo
@@ -351,6 +354,25 @@
                     motDong: !!it.motDong || MOT_DONG.indexOf(it.k) >= 0 };
       if (it.fixed) khungHeader().appendChild(node);
       else frag.appendChild(node);
+    });
+
+    // mục điều hướng thêm tay: dựng y hệt mục đo được, để cùng nằm trong header
+    THEM_MUC.forEach(function (m) {
+      var node = document.createElement('div');
+      node.className = 'el txt nav';
+      var lop = document.createElement('div');
+      lop.className = 'zoomed';
+      lop.textContent = m.text;
+      lop.style.cssText = 'transform:scale(' + NAV_ZOOM + ');transform-origin:0 0;' +
+        'font-size:' + ((m.fs || 8) * PHONG_CHU_NAV).toFixed(2) + 'px;white-space:nowrap';
+      if (CFG.wghtNav) lop.style.fontVariationSettings = '"wght" ' + CFG.wghtNav;
+      node.appendChild(lop);
+      node.style.zIndex = 9000;
+      node.style.transform = 'translate3d(' + m.x + 'px,' + (m.y || 0) + 'px,0)';
+      if (m.trang) { node.dataset.trang = m.trang; node.classList.add('navlink'); }
+      node._themTay = m;
+      khungHeader().appendChild(node);
+      themTay.push(node);
     });
 
     // menu xổ xuống
@@ -600,15 +622,14 @@
      đuổi theo bằng nội suy từng khung hình thay vì nhảy thẳng. */
   var cur = 0, target = 0, running = false;
 
+  /* Bám thẳng vị trí cuộn, mỗi khung hình cập nhật một lần.
+
+     Trước đây làm mượt bằng cách tiến dần 16% mỗi khung: nội dung mất gần nửa
+     giây mới đuổi kịp, kéo trên điện thoại thì thấy giật vì hình chạy sau ngón
+     tay. Cuộn vốn đã do người dùng điều khiển, không cần làm mượt thêm. */
   function frame() {
-    var d = target - cur;
-    if (Math.abs(d) < 0.05) {
-      cur = target;
-      running = false;
-    } else {
-      cur += d * 0.16;
-      requestAnimationFrame(frame);
-    }
+    running = false;
+    cur = target;
     place(cur);
     syncRoute(cur);
   }
@@ -616,9 +637,9 @@
   // Vị trí cuộn của bản gốc, suy từ tiến độ cuộn hiện tại. Dùng tỉ lệ thay vì
   // chia cho scale để luôn chạm được hai đầu quỹ đạo, kể cả khi thanh cuộn
   // chiếm chỗ làm cả khối bị thu nhỏ.
+  var maxCuon = 0;   // đo lại trong resize(), tránh đọc lại kích thước mỗi lần cuộn
   function progress() {
-    var max = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    return max > 0 ? Math.min(1, window.scrollY / max) * D.maxY : 0;
+    return maxCuon > 0 ? Math.min(1, window.scrollY / maxCuon) * D.maxY : 0;
   }
 
   // Sân khấu đặt cố định nên không tự trôi theo thanh cuộn ngang; phải tự dịch.
@@ -682,10 +703,15 @@
                  DICH_SAU * scale + vh) + 'px'   // xem hết nội dung, và đủ chỗ nhảy
       : (D.maxY * scale + vh) + 'px';
     if (TINH) cuonTinh = window.scrollY / scale;
+    maxCuon = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     cur = target = progress();
     place(cur);
     // Sau place(): logo canh theo ô vuông của mục điều hướng nên phải đợi các
     // mục ấy về đúng chỗ, không thì đo trúng vị trí cũ.
+    // mục thêm tay canh dọc giống các mục đo được
+    themTay.forEach(function (n) {
+      n.style.transform = 'translate3d(' + n._themTay.x + 'px,' + yNav.toFixed(2) + 'px,0)';
+    });
     datLogo(caoHeader);
     syncRoute(cur);
   }
