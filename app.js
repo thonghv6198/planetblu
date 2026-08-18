@@ -404,7 +404,8 @@
       // (mang nền trắng) phải rộng đúng bấy nhiêu, giữ nguyên mép phải — không thì
       // chữ tràn ra ngoài nền và chìm nghỉm khi menu đè lên ảnh.
       var z = NAV_ZOOM;
-      el.style.cssText = 'left:' + (d.x - d.w * (z - 1)).toFixed(2) + 'px;top:' +
+      d._trai = d.x - d.w * (z - 1);   // mép trái thật, dùng lại khi canh cột
+      el.style.cssText = 'left:' + d._trai.toFixed(2) + 'px;top:' +
         d.y + 'px;width:' + (d.w * z).toFixed(2) + 'px;height:' + d.h + 'px';
       lop.style.cssText = 'transform:scale(' + z + ');transform-origin:100% 0;' +
         'font-size:' + (d.fs * PHONG_CHU_NAV).toFixed(2) + 'px;line-height:' +
@@ -709,6 +710,7 @@
     maxCuon = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     cur = target = progress();
     daCanh = [];          // đổi cỡ cửa sổ thì đo lại từ đầu
+    DROPS.forEach(function (d) { d._daCanh = false; });
     els && Object.keys(els).forEach(function (k) { els[k].dxCanh = 0; });
     place(cur);
     if (CANH_O.length) canhOVuong();
@@ -772,6 +774,35 @@
       daCanh[idx] = true;
     });
     if (suaGi) place(cur);
+  }
+
+  /* Canh ô vuông ■ của menu xổ theo ô vuông của mục điều hướng nó thuộc về.
+
+     Đo tại chỗ như nhóm khối chữ: bề rộng chữ đổi theo độ đậm và giãn chữ nên
+     ghim sẵn toạ độ trong cấu hình là chóng lệch. Menu tuy đang ẩn nhưng vẫn
+     được dàn trang nên đo được, không cần mở ra. */
+  function canhMenuXo() {
+    var suaGi = false;
+    DROPS.forEach(function (d) {
+      if (!d.el || d._daCanh) return;
+      var cha = null;
+      header && header.querySelectorAll('.el').forEach(function (e) {
+        if (cha) return;
+        var t = (e.textContent || '').replace(/█/g, '').replace(/\s+/g, ' ').trim();
+        if ((d.under || []).indexOf(t) >= 0) cha = e;
+      });
+      if (!cha) return;
+      var a = oVuongCua(cha), b = oVuongCua(d.el);
+      if (!a || !b) return;
+      var lech = a.right - b.right;
+      if (Math.abs(lech) > 0.05) {
+        d._trai += lech / scale;
+        d.el.style.left = d._trai.toFixed(2) + 'px';
+        suaGi = true;
+      }
+      d._daCanh = true;
+    });
+    return suaGi;
   }
 
   /* Khung của ký tự ô vuông ■ đầu tiên trong một khối chữ */
@@ -1158,9 +1189,10 @@
   // Lúc này bộ chữ có thể chưa tải xong, mà logo lại canh theo ô vuông ■ của mục
   // điều hướng — đo sớm là trúng số đo của font tạm. Canh lại khi chữ đã sẵn sàng.
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () { resize(); canhOVuong(); });
+    document.fonts.ready.then(function () { resize(); canhOVuong(); canhMenuXo(); });
   } else {
     canhOVuong();
+    canhMenuXo();
   }
   toiDoan();
   window.addEventListener('scroll', onScroll, { passive: true });
