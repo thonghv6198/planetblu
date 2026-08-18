@@ -36,16 +36,21 @@ window.PB_CFG = {
      để cỡ chữ mục con khớp mục cha. */
   navZoom: 1.4063,
 
+  /* Độ đậm của mục điều hướng (trục `wght` của Inter). Menu xổ dùng chung số này
+     để ô vuông ■ và nét chữ khớp với mục cha. */
+  wghtNav: 589,
+  gianChuNav: '-0.2px',
+
   /* ---------- menu xổ xuống ---------- */
   /* under: rê vào những mục nào trên thanh điều hướng thì nhóm này mở ra
      x, y, w, h: vị trí và kích thước, theo hệ toạ độ của bản gốc
      trang: trang nội bộ để mở  |  href: địa chỉ ngoài  |  bỏ cả hai = không bấm được */
   menuXo: [
-    { under: ['Project'], x: 80.1, y: 24, w: 100, h: 15, fs: 8,
+    { under: ['Project'], x: 80.87, y: 22, w: 100, h: 15, fs: 8,
       text: 'Hoa và Rác █', trang: 'hoavarac.html' },
-    { under: ['Project'], x: 104.1, y: 41.5, w: 76, h: 14, fs: 8,
+    { under: ['Project'], x: 104.87, y: 37.45, w: 76, h: 14, fs: 8,
       text: 'Giants █', trang: 'giants.html' },
-    { under: ['EN', 'Planet BLU'], x: 1219, y: 24, w: 84.6, h: 14, fs: 8, text: 'VN █' }
+    { under: ['EN', 'Planet BLU'], x: 1219, y: 22, w: 84.6, h: 14, fs: 8, text: 'VN █' }
   ],
 
   /* ---------- ảnh xem trước khi rê vào một dòng sự kiện ---------- */

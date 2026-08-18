@@ -377,6 +377,11 @@
       lop.style.cssText = 'transform:scale(' + z + ');transform-origin:100% 0;' +
         'font-size:' + (d.fs * PHONG_CHU_NAV).toFixed(2) + 'px;line-height:' +
         (d.h / z).toFixed(3) + 'px;width:' + d.w + 'px;margin-left:auto';
+      // Cùng độ đậm với mục điều hướng: thiếu thì ô vuông ■ ra rộng khác một chút
+      // và chữ mảnh hơn mục cha.
+      if (CFG.wghtNav) lop.style.fontVariationSettings = '"wght" ' + CFG.wghtNav;
+      // Giãn chữ khớp mục cha, nếu không mép phải hai bên lệch nhau ~0,3px
+      if (CFG.gianChuNav) lop.style.letterSpacing = CFG.gianChuNav;
       frag.appendChild(el);
       DROPS[i].el = el;
     });
