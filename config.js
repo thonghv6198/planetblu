@@ -18,12 +18,15 @@ window.PB_CFG = {
     // Bỏ cả khối này thì thanh trở về như cũ, không có logo.
     logo: {
       src: 'assets/logo.png',
-      trai: 28,       // cách mép trái (bản máy tính)
+      // Logo thế chỗ mục "Planet BLU" ở cuối thanh, nên canh theo mép phải.
+      viTri: 'phai',        // bản máy tính: 'trai' | 'giua' | 'phai'
+      phai: 27,             // cách mép phải (bản máy tính)
+      phaiMobile: 23,       // cách mép phải (bản điện thoại)
+      trai: 28,       // cách mép trái, dùng khi viTri là 'trai'
       // Bản điện thoại: 'giua' | 'phai' | 'trai'. Đặt giữa để không đè lên nút mở
       // menu bên trái và cụm "EN / Planet BLU" bên phải.
-      viTriMobile: 'giua',
-      phai: 23,       // cách mép phải, dùng khi viTriMobile là 'phai'
-      dichMuc: 90,    // đẩy các mục bên trái sang phải bấy nhiêu (bản máy tính)
+      viTriMobile: 'phai',
+      dichMuc: 0,     // logo không còn nằm bên trái nên khỏi đẩy các mục
       // Ô vuông ■ nằm ở đâu trong ảnh, tính theo tỉ lệ chiều cao. Nhờ hai số này
       // logo tự phóng và tự canh sao cho ô vuông của nó trùng cỡ, trùng hàng với
       // ô vuông của các mục điều hướng. Đo bằng: python3 tools/do-logo.py
@@ -31,6 +34,9 @@ window.PB_CFG = {
       cao: 26         // dùng khi không khai oVuong
     }
   },
+
+  /* Mục điều hướng bỏ hẳn — logo đã thế chỗ. */
+  boMuc: ['Planet BLU'],
 
   /* Hệ số phóng của các mục điều hướng trong bản gốc — dùng cho menu xổ xuống
      để cỡ chữ mục con khớp mục cha. */
@@ -50,7 +56,7 @@ window.PB_CFG = {
       text: 'Hoa và Rác █', trang: 'hoavarac.html' },
     { under: ['Project'], x: 104.87, y: 37.45, w: 76, h: 14, fs: 8,
       text: 'Giants █', trang: 'giants.html' },
-    { under: ['EN', 'Planet BLU'], x: 1219, y: 22, w: 84.6, h: 14, fs: 8, text: 'VN █' }
+    { under: ['EN'], x: 1219, y: 22, w: 84.6, h: 14, fs: 8, text: 'VN █' }
   ],
 
   /* ---------- ảnh xem trước khi rê vào một dòng sự kiện ---------- */
@@ -138,7 +144,7 @@ window.PB_CFG = {
       // dài thêm sang phải và đè lên ảnh bên cạnh. Kéo sang trái để mép phải về
       // đúng chỗ cũ, đồng thời hai ô vuông thẳng cột và chạm nhau.
       k67: { dx: -34.7 },
-      k68: { dx: -32.3, dy: -0.31 }
+      k68: { dx: -34.7, dy: -0.31 }
     },
     // nhóm "Coming soon / Past event / Contact us" thẳng cột với "Current"
     'event.html': { k0: { dx: 6.8 }, k1: { dx: 6.8 }, k2: { dx: 6.8 } },

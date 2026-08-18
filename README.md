@@ -77,6 +77,7 @@ trong các tệp `.html` cho khớp màu nền biểu tượng.
 | `truot` | kéo dài đường trượt của một phần tử khi cuộn |
 | `lienKet` | gắn liên kết cho phần tử bản mẫu bỏ trống |
 | `oNhap` | kích thước ô nhập của biểu mẫu và khoảng đẩy nét kẻ xuống |
+| `boMuc` | mục điều hướng bỏ hẳn khỏi thanh (logo đã thế chỗ) |
 | `oChon` | trường nào là ô chọn (thay vì ô gõ chữ) và các lựa chọn của nó |
 | `chu` | giãn chữ và giãn dòng tối thiểu; bỏ đi thì trả về đúng số đo bản mẫu |
 | `rongToiThieu` | dưới bề rộng này thì thôi thu nhỏ, chuyển sang cuộn ngang (mặc định 768) |
@@ -143,7 +144,7 @@ Ghi lại để sau này khỏi tưởng là lỗi:
 - các trường trong biểu mẫu Visit bấm vào nhập được (bản mẫu chỉ vẽ đường kẻ);
   Event Name / Ticket Type / Calendar là ô chọn, mũi tên ▼ hạ xuống ngang trường
 - vùng rê chuột của dòng sự kiện phủ cả ô, không riêng phần chữ
-- logo đứng đầu thanh điều hướng, ô vuông của nó canh bằng ô vuông các mục, bấm về trang chủ
+- logo thay chỗ mục "Planet BLU" ở cuối thanh điều hướng, bấm về trang chủ
 - "Coming soon" / "Past event" ở trang Event bấm được để xuống đúng phần
 - giãn chữ để `normal` thay vì -0,2px, và giãn dòng tối thiểu 1,45 lần cỡ chữ
   cho khối nhiều dòng — bản mẫu bó chữ chặt hơn Inter vốn được thiết kế

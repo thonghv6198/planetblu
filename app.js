@@ -76,6 +76,8 @@
   var O_CHON = theoTrang(CFG.oChon) || {};
   var MOT_DONG = theoTrang(CFG.motDong) || [];
   var CHU = CFG.chu || null;
+  // Mục điều hướng cần bỏ hẳn (đã có thứ khác thế chỗ, ví dụ logo)
+  var BO_MUC = CFG.boMuc || [];
 
   // Thanh điều hướng là một khối header riêng: dải nền trắng cao cố định, các mục
   // canh giữa theo chiều dọc, luôn dính trên cùng.
@@ -155,6 +157,12 @@
     var frag = document.createDocumentFragment();
 
     D.items.forEach(function (it) {
+      // Bỏ hẳn mục điều hướng khai trong boMuc
+      if (it.fixed && BO_MUC.length) {
+        var nhan = (it.html || '').replace(/<[^>]*>/g, ' ')
+          .replace(/█/g, '').replace(/\s+/g, ' ').trim();
+        if (BO_MUC.indexOf(nhan) >= 0) return;
+      }
       var node;
       if (it.tag === 'video') {
         // Bản gốc phát video dạng HLS; bản dựng lại dùng tệp mp4 đã ghép sẵn,
@@ -710,7 +718,7 @@
   function datLogo(caoHeader) {
     var anh = header && header.querySelector('#logo');
     if (!anh || !LOGO) return;
-    var viTri = D.mobile ? (LOGO.viTriMobile || 'trai') : 'trai';
+    var viTri = D.mobile ? (LOGO.viTriMobile || 'trai') : (LOGO.viTri || 'trai');
     if (viTri === 'trai') anh.style.left = ((LOGO.trai || 0) / scale).toFixed(2) + 'px';
 
     var oV = LOGO.oVuong, moc = oV && oVuongNav();
@@ -733,8 +741,10 @@
      của nó nằm ngoài màn hình. */
   function datLogoNgang(anh, viTri) {
     var rong = anh.getBoundingClientRect().width / scale;
+    var phai = D.mobile ? (LOGO.phaiMobile !== undefined ? LOGO.phaiMobile : LOGO.phai)
+                        : LOGO.phai;
     var x = viTri === 'giua' ? (D.baseW - rong) / 2
-                             : D.baseW - (LOGO.phai || 0) - rong;
+                             : D.baseW - (phai || 0) - rong;
     anh.style.left = x.toFixed(2) + 'px';
   }
 
