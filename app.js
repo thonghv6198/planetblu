@@ -712,6 +712,90 @@
     }
   }
 
+  /* Dựng ô chọn riêng thay cho thẻ <select>.
+
+     Danh sách xổ ra của <select> do hệ điều hành vẽ nên không nhận màu từ CSS —
+     trên macOS luôn ra nền xám. Tự dựng thì mới cho được nền đen chữ trắng đúng
+     tinh thần trang. Vẫn giữ điều hướng bằng bàn phím: Enter/Space mở, mũi tên
+     lên xuống chọn, Esc đóng. */
+  function dungOChon(dsach) {
+    var o = document.createElement('div');
+    o.className = 'onhap ochon';
+    o.tabIndex = 0;
+    o.setAttribute('role', 'combobox');
+    o.setAttribute('aria-expanded', 'false');
+    o.setAttribute('aria-label', 'ô chọn');
+
+    var nhan = document.createElement('span');
+    nhan.className = 'gtri';
+    o.appendChild(nhan);
+
+    var bang = document.createElement('ul');
+    bang.className = 'bangchon';
+    bang.setAttribute('role', 'listbox');
+    dsach.forEach(function (v, i) {
+      var m = document.createElement('li');
+      m.setAttribute('role', 'option');
+      m.textContent = v;
+      m.dataset.i = i;
+      bang.appendChild(m);
+    });
+    o.appendChild(bang);
+
+    var dangMo = false, dangTro = -1;
+    var muc = function () { return [].slice.call(bang.children); };
+
+    function ve() {
+      muc().forEach(function (m, i) { m.classList.toggle('tro', i === dangTro); });
+    }
+    function mo() {
+      dangMo = true;
+      o.classList.add('mo');
+      o.setAttribute('aria-expanded', 'true');
+      ve();
+    }
+    function dong() {
+      dangMo = false;
+      o.classList.remove('mo');
+      o.setAttribute('aria-expanded', 'false');
+    }
+    function chonMuc(i) {
+      var m = muc()[i];
+      if (!m) return;
+      dangTro = i;
+      nhan.textContent = m.textContent;
+      o.dataset.gtri = m.textContent;
+      muc().forEach(function (x, j) { x.setAttribute('aria-selected', j === i ? 'true' : 'false'); });
+      dong();
+    }
+
+    o.addEventListener('click', function (ev) {
+      var m = ev.target.closest('li[role="option"]');
+      if (m) { chonMuc(+m.dataset.i); ev.stopPropagation(); return; }
+      dangMo ? dong() : mo();
+      ev.stopPropagation();
+    });
+    o.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') { dong(); return; }
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        if (dangMo && dangTro >= 0) chonMuc(dangTro); else mo();
+        return;
+      }
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        if (!dangMo) mo();
+        var n = muc().length;
+        dangTro = (dangTro + (ev.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
+        ve();
+      }
+    });
+    o.addEventListener('blur', function () { setTimeout(dong, 120); });
+    document.addEventListener('click', function () { if (dangMo) dong(); });
+
+    return o;
+  }
+
   /* Đặt logo. Nếu cấu hình khai ô vuông ■ nằm ở đâu trong ảnh thì phóng và canh
      sao cho ô ấy trùng cỡ, trùng hàng với ô vuông của các mục điều hướng — cả
      hàng đọc thành một dải đều. Không khai thì chỉ canh giữa theo chiều dọc. */
@@ -797,19 +881,7 @@
       var chon = O_CHON[kh.dataset.k];
       var o;
       if (chon) {
-        o = document.createElement('select');
-        o.className = 'onhap ochon';
-        o.setAttribute('aria-label', 'ô chọn');
-        var rong = document.createElement('option');
-        rong.value = '';
-        rong.textContent = '';
-        o.appendChild(rong);
-        chon.forEach(function (v) {
-          var t = document.createElement('option');
-          t.value = v;
-          t.textContent = v;
-          o.appendChild(t);
-        });
+        o = dungOChon(chon);
       } else {
         o = document.createElement('input');
         o.type = 'text';

@@ -261,12 +261,49 @@ a.el { text-decoration: none; color: inherit; display: block; }
 }
 .el.svg:focus-within > svg path { stroke-width: 2; }
 
-/* Ô chọn: giấu mũi tên mặc định của trình duyệt vì bản mẫu đã vẽ sẵn ▼ riêng. */
+/* Ô chọn tự dựng: danh sách xổ ra của thẻ <select> do hệ điều hành vẽ nên không
+   nhận màu từ CSS (macOS luôn ra nền xám). Tự dựng mới cho được nền đen chữ
+   trắng. Phần đóng nhìn y như ô gõ chữ, chỉ khác con trỏ chuột. */
 .el.svg .ochon {
-  -webkit-appearance: none;
-  appearance: none;
   cursor: pointer;
+  display: block;
+  outline: 0;
 }
+.el.svg .ochon .gtri {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Danh sách xổ xuống */
+.el.svg .ochon .bangchon {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 100%;
+  margin: 4px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #000;
+  color: #fff;
+  z-index: 9500;
+  display: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .28);
+  /* Khối chứa có giãn dòng 0 (số đo của bản mẫu) nên phải đặt lại, không thì
+     các dòng chồng sát vào nhau. */
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+.el.svg .ochon.mo .bangchon { display: block; }
+.el.svg .ochon .bangchon li {
+  padding: 3px 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .12s ease;
+}
+/* Cả rê chuột lẫn di bằng bàn phím đều sáng lên như nhau */
+.el.svg .ochon .bangchon li:hover,
+.el.svg .ochon .bangchon li.tro { background: #333; }
 
 /* Logo đứng đầu thanh điều hướng, bấm được để về trang chủ */
 /* Bản mẫu ở khổ điện thoại không có dải nền cho thanh điều hướng — nội dung trôi
