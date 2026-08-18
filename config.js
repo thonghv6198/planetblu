@@ -98,6 +98,13 @@ window.PB_CFG = {
     }
   },
 
+  /* ---------- giãn chữ và giãn dòng ---------- */
+  /* Bỏ cả khối này thì trả về đúng số đo của bản mẫu.
+       gianChu:          giá trị letter-spacing áp cho mọi khối chữ
+       gianDongToiThieu: giãn dòng tối thiểu, tính theo lần cỡ chữ (chỉ khối
+                         nhiều dòng; khối một dòng nới sẽ trôi khỏi chỗ đã đo) */
+  chu: { gianChu: 'normal', gianDongToiThieu: 1.45 },
+
   /* ---------- ép chữ và ô vuông ■ về cùng một dòng ---------- */
   /* Bản mẫu để ô vuông rớt xuống dòng dưới rồi đè lên chữ; khai ở đây để nó nằm
      ngay sau chữ. */

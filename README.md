@@ -78,6 +78,7 @@ trong các tệp `.html` cho khớp màu nền biểu tượng.
 | `lienKet` | gắn liên kết cho phần tử bản mẫu bỏ trống |
 | `oNhap` | kích thước ô nhập của biểu mẫu và khoảng đẩy nét kẻ xuống |
 | `oChon` | trường nào là ô chọn (thay vì ô gõ chữ) và các lựa chọn của nó |
+| `chu` | giãn chữ và giãn dòng tối thiểu; bỏ đi thì trả về đúng số đo bản mẫu |
 | `rongToiThieu` | dưới bề rộng này thì thôi thu nhỏ, chuyển sang cuộn ngang (mặc định 768) |
 | `trangNgoai` | địa chỉ ngoài cần đổi hướng về trang nội bộ |
 | `trangGoc` | địa chỉ bản mẫu → trang tương ứng trong bản dựng lại |
@@ -138,5 +139,7 @@ Ghi lại để sau này khỏi tưởng là lỗi:
 - vùng rê chuột của dòng sự kiện phủ cả ô, không riêng phần chữ
 - logo đứng đầu thanh điều hướng, ô vuông của nó canh bằng ô vuông các mục, bấm về trang chủ
 - "Coming soon" / "Past event" ở trang Event bấm được để xuống đúng phần
+- giãn chữ để `normal` thay vì -0,2px, và giãn dòng tối thiểu 1,45 lần cỡ chữ
+  cho khối nhiều dòng — bản mẫu bó chữ chặt hơn Inter vốn được thiết kế
 - dòng sự kiện đang diễn ra ở trang Event dẫn về trang tác phẩm, thay vì mở
   trang soạn thảo Readymag như bản mẫu

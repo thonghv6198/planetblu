@@ -75,6 +75,7 @@
   var LIEN_KET = theoTrang(CFG.lienKet) || {};
   var O_CHON = theoTrang(CFG.oChon) || {};
   var MOT_DONG = theoTrang(CFG.motDong) || [];
+  var CHU = CFG.chu || null;
 
   // Thanh điều hướng là một khối header riêng: dải nền trắng cao cố định, các mục
   // canh giữa theo chiều dọc, luôn dính trên cùng.
@@ -247,6 +248,21 @@
 
       var s = it.st || {};
       var tgt = node._inner || node;
+
+      /* Nới giãn chữ và giãn dòng cho gần với cách Inter được thiết kế.
+         Bản mẫu bó chữ lại (-0,2px) và nhiều khối có giãn dòng nhỏ hơn cả cỡ chữ.
+         Chỉ nới giãn dòng cho khối nhiều dòng — khối một dòng mà nới thì hộp cao
+         thêm và trôi khỏi vị trí đã đo. */
+      if (CHU) {
+        if (CHU.gianChu !== undefined) s = Object.assign({}, s, { ls: CHU.gianChu });
+        var nhieuDong = (it.html || '').indexOf('<br') >= 0;
+        if (nhieuDong && CHU.gianDongToiThieu) {
+          var fs0 = parseFloat(s.fs) || 0;
+          var lh0 = parseFloat(s.lh) || 0;
+          var lhMoi = fs0 * CHU.gianDongToiThieu;
+          if (fs0 && lhMoi > lh0) s = Object.assign({}, s, { lh: lhMoi.toFixed(2) + 'px' });
+        }
+      }
       if (s.fs) {
         tgt.style.fontSize = it.fixed
           ? (parseFloat(s.fs) * PHONG_CHU_NAV).toFixed(2) + 'px'
