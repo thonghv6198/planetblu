@@ -98,6 +98,13 @@ window.PB_CFG = {
     }
   },
 
+  /* ---------- ép chữ và ô vuông ■ về cùng một dòng ---------- */
+  /* Bản mẫu để ô vuông rớt xuống dòng dưới rồi đè lên chữ; khai ở đây để nó nằm
+     ngay sau chữ. */
+  motDong: {
+    'index.html': ['k67', 'k68']
+  },
+
   /* ---------- gắn liên kết cho một phần tử ---------- */
   /* Dùng khi bản mẫu không để sẵn liên kết. { mã phần tử: trang cần mở } */
   lienKet: {
@@ -113,9 +120,11 @@ window.PB_CFG = {
     'index.html': {
       // ảnh mở đầu trang chủ kéo lên cho liền với header
       k18: { dy: -29 },
-      // Ô vuông của "Hoa và rác" và "Giants" chừa 0,3px nên hở một vệt trắng;
-      // kéo sát lại thành một khối liền.
-      k68: { dy: -0.31 }
+      // "Hoa và rác" và "Giants": ô vuông chuyển về cùng dòng với chữ nên khối
+      // dài thêm sang phải và đè lên ảnh bên cạnh. Kéo sang trái để mép phải về
+      // đúng chỗ cũ, đồng thời hai ô vuông thẳng cột và chạm nhau.
+      k67: { dx: -34.7 },
+      k68: { dx: -32.3, dy: -0.31 }
     },
     // nhóm "Coming soon / Past event / Contact us" thẳng cột với "Current"
     'event.html': { k0: { dx: 6.8 }, k1: { dx: 6.8 }, k2: { dx: 6.8 } },

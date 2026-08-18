@@ -74,6 +74,7 @@
   var TRUOT = theoTrang(CFG.truot) || [];
   var LIEN_KET = theoTrang(CFG.lienKet) || {};
   var O_CHON = theoTrang(CFG.oChon) || {};
+  var MOT_DONG = theoTrang(CFG.motDong) || [];
 
   // Thanh điều hướng là một khối header riêng: dải nền trắng cao cố định, các mục
   // canh giữa theo chiều dọc, luôn dính trên cùng.
@@ -309,13 +310,18 @@
       // thanh điều hướng luôn nằm trên nội dung, nếu không ảnh sẽ chặn mất chuột
       if (it.fixed) { node.classList.add('nav'); node.style.zIndex = 9000; }
 
-      if (it.motDong) {
+      // Khối khai trong motDong: chữ và ô vuông ■ về cùng một dòng thay vì ô vuông
+      // rớt xuống dòng dưới rồi đè lên chữ.
+      if (it.motDong || MOT_DONG.indexOf(it.k) >= 0) {
         node.classList.add('one-line');
-        if (node._inner) node._inner.style.whiteSpace = 'nowrap';
+        if (node._inner) {
+          node._inner.innerHTML = node._inner.innerHTML.replace(/<br\s*\/?>/gi, ' ');
+          node._inner.style.whiteSpace = 'nowrap';
+        }
       }
       els[it.k] = { node: node, tr: it.tr, i: 0, zt: node._inner ? it.zt : 0,
                     clip: '', fixed: !!it.fixed, xoay: it.xoay || '',
-                    motDong: !!it.motDong };
+                    motDong: !!it.motDong || MOT_DONG.indexOf(it.k) >= 0 };
       if (it.fixed) khungHeader().appendChild(node);
       else frag.appendChild(node);
     });
