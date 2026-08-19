@@ -388,6 +388,12 @@
       lop.className = 'zoomed';
       lop.textContent = d.text;
       el.appendChild(lop);
+      /* Lớp chữ phóng z lần nên chiếm rộng gấp z; hộp nền phải nới theo, không
+         thì chữ thò ra ngoài nền và chìm khi menu đè lên ảnh. */
+      el._noiNen = function () {
+        var w = lop.getBoundingClientRect().width / scale;
+        el.style.width = w.toFixed(2) + 'px';
+      };
       if (d.trang) {
         el.href = url(d.trang);
       } else if (d.href) {
@@ -404,12 +410,20 @@
       // (mang nền trắng) phải rộng đúng bấy nhiêu, giữ nguyên mép phải — không thì
       // chữ tràn ra ngoài nền và chìm nghỉm khi menu đè lên ảnh.
       var z = NAV_ZOOM;
-      d._trai = d.x - d.w * (z - 1);   // mép trái thật, dùng lại khi canh cột
-      el.style.cssText = 'left:' + d._trai.toFixed(2) + 'px;top:' +
-        d.y + 'px;width:' + (d.w * z).toFixed(2) + 'px;height:' + d.h + 'px';
+      /* Nền trắng ôm sát chữ: bề rộng khai trong cấu hình chỉ hợp với đúng chuỗi
+         khai sẵn, mà tên dự án lấy từ WordPress thì dài ngắn tuỳ nội dung. */
+      /* Khối ngoài neo theo mép PHẢI: lớp chữ bên trong phóng quanh mép phải nên
+         chỉ mép ấy đứng yên. Neo mép trái thì nền hụt khi tên dự án dài ngắn khác
+         nhau — mà tên lấy từ WordPress thì dài bao nhiêu cũng có. */
+      d._phai = D.baseW - d.x;
+      el.style.cssText = 'right:' + d._phai.toFixed(2) + 'px;left:auto;top:' +
+        d.y + 'px;width:auto;height:' + d.h + 'px;white-space:nowrap';
       lop.style.cssText = 'transform:scale(' + z + ');transform-origin:100% 0;' +
         'font-size:' + (d.fs * PHONG_CHU_NAV).toFixed(2) + 'px;line-height:' +
-        (d.h / z).toFixed(3) + 'px;width:' + d.w + 'px;margin-left:auto';
+        (d.h / z).toFixed(3) + 'px;white-space:nowrap;' +
+        // block để không nằm trên đường chữ của khối cha (sẽ tụt xuống), nhưng
+        // vẫn phải tự co theo chữ để đo được bề rộng thật
+        'display:block;width:max-content;margin-left:auto';
       // Cùng độ đậm với mục điều hướng: thiếu thì ô vuông ■ ra rộng khác một chút
       // và chữ mảnh hơn mục cha.
       if (CFG.wghtNav) lop.style.fontVariationSettings = '"wght" ' + CFG.wghtNav;
@@ -796,12 +810,13 @@
       if (!a || !b) return;
       var lech = a.right - b.right;
       if (Math.abs(lech) > 0.05) {
-        d._trai += lech / scale;
-        d.el.style.left = d._trai.toFixed(2) + 'px';
+        d._phai -= lech / scale;
+        d.el.style.right = d._phai.toFixed(2) + 'px';
         suaGi = true;
       }
       d._daCanh = true;
     });
+    DROPS.forEach(function (d) { if (d.el && d.el._noiNen) d.el._noiNen(); });
     return suaGi;
   }
 

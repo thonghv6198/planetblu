@@ -147,6 +147,11 @@ window.PB_CFG = {
      giãn chữ — khác với việc ghim sẵn số dịch trong `chinh`. */
   canhO: {
     'index.html':        [['k67', 'k68']],
+    // nhóm "Video / Exhibition / Technical drawing / Support" ở trang tác phẩm
+    'hoavarac.html':        [['k0', 'k1', 'k2', 'k3']],
+    'hoavarac.html@mobile': [['k0', 'k1', 'k2', 'k3']],
+    'giants.html':          [['k0', 'k1', 'k2', 'k3']],
+    'giants.html@mobile':   [['k0', 'k1', 'k2', 'k3']],
     'visit.html':        [['k0', 'k1', 'k2']],
     'visit.html@mobile': [['k0', 'k1', 'k2']],
     'event.html':        [['k0', 'k1', 'k2']],
