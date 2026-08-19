@@ -162,7 +162,9 @@ window.PB_CFG = {
   /* Bản mẫu để ô vuông rớt xuống dòng dưới rồi đè lên chữ; khai ở đây để nó nằm
      ngay sau chữ. */
   motDong: {
-    'index.html': ['k67', 'k68']
+    'index.html': ['k67', 'k68'],
+    // "Buy ticket ■": bản mẫu để ô vuông xuống dòng, đè lên dòng ngày bên dưới
+    'event.html': ['k9']
   },
 
   /* ---------- gắn liên kết cho một phần tử ---------- */
@@ -192,9 +194,19 @@ window.PB_CFG = {
       k68: { dx: -34.7, dy: -0.31 }
     },
     // nhóm "Coming soon / Past event / Contact us" thẳng cột với "Current"
-    'event.html': { k0: { dx: 6.8 }, k1: { dx: 6.8 }, k2: { dx: 6.8 } },
-    // Trên điện thoại khoảng lệch khác, và "Contact us" mang mã k3 chứ không phải k2
-    'event.html@mobile': { k0: { dx: 4.8 }, k1: { dx: 1.4 } },
+    'event.html': {
+      k0: { dx: 6.8 }, k1: { dx: 6.8 }, k2: { dx: 6.8 },
+      /* Tên và thể loại của sự kiện đang diễn ra: khung bản mẫu chỉ vừa khít
+         "Hoa và rác" nên tên dài hơn bị thu nhỏ chữ. Nới bằng khung của mục
+         "Sắp diễn ra" bên dưới để cỡ chữ hai mục bằng nhau. */
+      k7: { rong: 218 }, k8: { rong: 218 },
+      // khoảng ngày dài hơn ngày mẫu nên cũng bị thu
+      k10: { rong: 150 }
+    },
+    'event.html@mobile': {
+      k0: { dx: 4.8 }, k1: { dx: 1.4 },
+      k9: { rong: 181.6 }, k10: { rong: 181.6 }, k11: { rong: 150 }
+    },
     'visit.html': {
       // hai ô vuông rời về đúng cột với nhóm bên trên
       k3: { dx: -1.2 }, k5: { dx: -1.2 },

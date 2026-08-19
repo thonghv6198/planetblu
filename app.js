@@ -236,7 +236,7 @@
             inner.innerHTML = it.html;
             /* Khối bị ép bề rộng thì phải cho chữ tự xuống dòng: giữ 'pre' là
                giữ nguyên cách ngắt dòng đo từ bản mẫu, chữ sẽ tràn ra ngoài. */
-            var ep = CHINH[it.k] && CHINH[it.k].capPhai;
+            var ep = CHINH[it.k] && (CHINH[it.k].capPhai || CHINH[it.k].rong);
             if (it.nowrap && !ep) inner.style.whiteSpace = 'pre';
             else if (ep) {
               /* Bỏ luôn các điểm ngắt dòng đo từ bản mẫu: giữ lại thì mỗi dòng
@@ -603,6 +603,9 @@
       if (chinh && chinh.capPhai) {
         w = Math.max(40, D.baseW * chinh.capPhai - x);
       }
+      /* rong: nới bề rộng khối (px). Khung của bản mẫu đo vừa khít nội dung mẫu,
+         nội dung dài hơn sẽ bị thu nhỏ chữ cho vừa — nới ra là giữ được cỡ chữ. */
+      if (chinh && chinh.rong) w = chinh.rong;
       if (!e.motDong) {
         node.style.width = w.toFixed(1) + 'px';
         // "cao" trong config.js thu nhỏ vùng nhận chuột của khối mà không cắt
