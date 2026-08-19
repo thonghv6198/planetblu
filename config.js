@@ -180,6 +180,11 @@ window.PB_CFG = {
     'index.html': {
       // ảnh mở đầu trang chủ kéo lên cho liền với header
       k18: { dy: -29 },
+      /* Phần About: chữ dài hơn bản mẫu nên tràn sang nửa phải và chui xuống
+         dưới tấm ảnh. Chặn mép phải ở giữa trang; ảnh bắt đầu ở 49,3% nên lấy
+         0,49 để chữ dừng ngay trước mép ảnh. */
+      k106: { capPhai: 0.49 },
+      k111: { capPhai: 0.49 },
       // "Hoa và rác" và "Giants": ô vuông chuyển về cùng dòng với chữ nên khối
       // dài thêm sang phải và đè lên ảnh bên cạnh. Kéo sang trái để mép phải về
       // đúng chỗ cũ, đồng thời hai ô vuông thẳng cột và chạm nhau.

@@ -234,7 +234,16 @@
             inner.style.transform = 'scale(' + it.zt + ')';
             inner.style.transformOrigin = '0 0';
             inner.innerHTML = it.html;
-            if (it.nowrap) inner.style.whiteSpace = 'pre';
+            /* Khối bị ép bề rộng thì phải cho chữ tự xuống dòng: giữ 'pre' là
+               giữ nguyên cách ngắt dòng đo từ bản mẫu, chữ sẽ tràn ra ngoài. */
+            var ep = CHINH[it.k] && CHINH[it.k].capPhai;
+            if (it.nowrap && !ep) inner.style.whiteSpace = 'pre';
+            else if (ep) {
+              /* Bỏ luôn các điểm ngắt dòng đo từ bản mẫu: giữ lại thì mỗi dòng
+                 cũ vừa xuống hàng vừa bị bẻ tiếp, chữ so le rất xấu. */
+              inner.innerHTML = inner.innerHTML.replace(/<br\s*\/?>/gi, ' ');
+              inner.style.whiteSpace = 'normal';
+            }
             // Khối không nằm trong bảng ngắt dòng tức bản gốc chỉ có một dòng.
             // Chữ bản dựng lại nhỉnh hơn vài phần trăm nên dễ bị bẻ xuống dòng và
             // đè lên khối kế bên — chặn lại cho đúng bản gốc.
@@ -588,6 +597,12 @@
       else y += shiftY + (chinh && chinh.dy || 0) - cuonTinh;
       node.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)' +
         (e.xoay ? ' ' + e.xoay : '');
+      /* capPhai: chặn mép phải của khối, tính theo tỉ lệ bề ngang bố cục
+         (0.5 = giữa trang). Dùng khi nội dung dài hơn bản mẫu và tràn sang cột
+         bên cạnh — chữ tự xuống dòng trong phần còn lại. */
+      if (chinh && chinh.capPhai) {
+        w = Math.max(40, D.baseW * chinh.capPhai - x);
+      }
       if (!e.motDong) {
         node.style.width = w.toFixed(1) + 'px';
         // "cao" trong config.js thu nhỏ vùng nhận chuột của khối mà không cắt
